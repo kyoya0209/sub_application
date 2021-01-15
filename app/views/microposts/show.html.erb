@@ -1,0 +1,54 @@
+<% provide(:title, "Comments for #{@micropost.user.username}'s post") %>
+<div class="row">
+  <div class="col-md-12">
+    <ol class="microposts">
+      <ol id="micropost-<%= @micropost.id %>", class="microposts_show">
+        <%= link_to gravatar_for(@micropost.user, size: 50), @micropost.user %>
+        <span class="user"><%= link_to @micropost.user.username, @micropost.user %></span>
+        <span class="content">
+          <%= @micropost.content %>
+          <%= image_tag @micropost.display_image if @micropost.image.attached? %>
+          </span>
+        <span class="timestamp">
+          Posted <%= time_ago_in_words(@micropost.created_at) %> ago.
+          <% if current_user?(@micropost.user) %>
+            <%= link_to "delete", @micropost, method: :delete,
+                                             data: { confirm: "You sure?" } %>
+          <% end %>
+        </span>
+        <span class="like" id="like_form_<%= @micropost.id %>">
+          <% if @micropost.liked_by.include?(current_user) %>
+            <%= render "microposts/unlike", micropost: @micropost %>
+          <% else %>
+            <%= render "microposts/like", micropost: @micropost %>
+          <% end %>
+        </span>
+        <% @comments.each do |comment| %>
+          <span class="comment">
+            <%= link_to gravatar_for(comment.user, size: 30), comment.user %>
+            <%= link_to comment.user.username, comment.user %></br>
+            <%= comment.content %>
+          </span>
+          <span class="timestamp_2">
+            Posted <%= time_ago_in_words(comment.created_at) %> ago.
+            <% if current_user?(comment.user) %>
+              <%= link_to 'delete', micropost_comment_path(@micropost, comment), method: :delete, data: { confirm: "You sure?" } %>
+            <% end %>
+          </span>
+        <% end %>
+        
+      </ol>
+    </ol>
+  </div>
+</div>    
+  <%= form_with model: [@micropost, @comment], local: true do |f| %>
+    <%= render 'shared/error_messages', object: f.object %>
+    
+    <%= f.text_area :content, class: 'form-control',　id:'content', placeholder: "Comment as #{current_user.username}..." %>
+    <%= f.submit "Comment", class: "btn btn-primary" %>
+  <% end %>
+  
+  <div class = "others">  
+    <%= link_to "Back to home", root_path %></br>
+    <%= link_to "Back to All user page", users_path %>
+  </div>  

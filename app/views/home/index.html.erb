@@ -1,0 +1,38 @@
+<% if user_signed_in? %>
+  <div class="row">
+    <aside class="col-md-4">
+      <section class="user_info">
+        <%= render 'shared/user_info' %>
+      </section>
+      <section class="stats">
+        <%= render 'shared/stats' %>
+      </section>
+      <section class="micropost_form">
+        <%= render 'shared/micropost_form' %>
+      </section>
+    </aside>
+    <div class="col-md-20">
+      <h4>Micropost Feed</h4>
+      <%= form_tag(root_path, method: 'get' ) do %>
+        <%= text_field_tag :search, "", {class: "form-control", onclick: "this.select()", placeholder: "Search posts here..."}  %>
+        <%= submit_tag 'Search', name: nil, class: "btn btn-primary" %>
+      <% end %>
+      
+      <%= render 'shared/feed' %>
+    </div>
+  </div>
+<% else %>
+<div class = "center jumbotron">
+  <h1>Welcome to the Sub Application!</h1>
+  <h2>
+    This is the home page for the
+    <a href="https://camp.potepan.com/">Potepan Camp</a>
+    sample application.
+  </h2>
+  
+  <%= link_to "Sign up here!", new_user_registration_path, class: "btn btn-lg btn-primary" %>
+</div>
+
+<%= link_to image_tag("Potepan_logo", alt: "Potepan_logo", width: "250px"),
+                      "https://camp.potepan.com/" %>
+<% end %>

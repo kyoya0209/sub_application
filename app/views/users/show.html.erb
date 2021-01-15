@@ -1,0 +1,37 @@
+<% provide(:title, @user.username) %>
+<div class="row">
+  <aside class="col-md-4">
+    <section class="user_info">
+      <h1>
+        <%= gravatar_for @user %>
+        <%= @user.username %>
+      </h1>
+    </section>
+    <section class="stats">
+      <%= render 'shared/stats' %>
+    </section>
+  </aside>
+  <div class="col-md-8">
+    <% if @user.profile %>
+      <h4>Profile</h4>
+      <div class="profile">
+        <%= @user.profile %>
+      </div>
+    <% end %>
+    <%= render 'follow_form' if user_signed_in? %>
+    <% if @user.microposts.any? %>
+      <div class="search_form">
+        <h4>Microposts (<%= @user.microposts.count %>)</h4>
+        <%= form_tag(user_path, method: 'get' ) do %>
+        <%= text_field_tag :search, "", {class: "form-control", onclick: "this.select()", placeholder: "Search posts here..."}  %>
+        <%= submit_tag 'Search', name: nil, class: "btn btn-primary" %>
+      </div>
+    <% end %>
+      
+      <ol class="microposts">
+        <%= render @microposts %>
+      </ol>
+      <%= will_paginate @microposts %>
+    <% end %>
+  </div>
+</div>

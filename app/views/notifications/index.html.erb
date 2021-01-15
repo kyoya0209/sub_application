@@ -1,0 +1,16 @@
+<% provide(:title, "Notifications") %>
+<h1 class="text-center">Notifications</h1>
+  <%= link_to notification_path(current_user), method: :delete, data: { confirm: "You sure?" } do %>
+    <i class="fas fa-trash" style="color: black;"></i>
+    <h7 style="color: black;">Delete all</h7>
+  <% end %>
+  <hr>
+<% notifications = @notifications.where.not(visiter_id: current_user.id) %>
+<% if notifications.exists? %>
+  <div class="users-index">
+    <%= render notifications %>
+  </div>
+  <%= will_paginate notifications %>
+<% else %>
+  <p>No notification</p>
+<% end %>

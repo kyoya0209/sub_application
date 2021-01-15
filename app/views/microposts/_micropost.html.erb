@@ -1,0 +1,22 @@
+<li id="micropost-<%= micropost.id %>">
+  <%= link_to gravatar_for(micropost.user, size: 50), micropost.user %>
+  <span class="user"><%= link_to micropost.user.username, micropost.user %></span>
+  <span class="content">
+    <%= link_to micropost.content, micropost, class: "feed_content" %>
+    <%= image_tag micropost.display_image if micropost.image.attached? %>
+  </span>
+  <span class="timestamp">
+    Posted <%= time_ago_in_words(micropost.created_at) %> ago.
+    <% if current_user?(micropost.user) %>
+      <%= link_to "delete", micropost, method: :delete,
+                                       data: { confirm: "You sure?" } %>
+    <% end %>
+  </span>
+  <span class="like" id="like_form_<%= micropost.id %>">
+    <% if micropost.liked_by.include?(current_user) %>
+      <%= render "microposts/unlike", micropost: micropost %>
+    <% else %>
+      <%= render "microposts/like", micropost: micropost %>
+    <% end %>
+  </span>
+</li>

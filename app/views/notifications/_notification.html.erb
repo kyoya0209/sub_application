@@ -1,0 +1,20 @@
+<% visiter=notification.visiter %>
+
+<div class="user-view clearfix ">
+  <%= link_to gravatar_for(visiter, size: 70), visiter %>
+  <% @comment=nil %>
+  <% case notification.action %>
+    <% when "follow" then %>
+      <%= link_to notification.visiter.username, notification.visiter, style:"font-weight: bold;" %>  folows you.
+    <% when "like" then %>
+      <%= link_to notification.visiter.username, notification.visiter, style:"font-weight: bold;" %> likes <%= link_to 'your post', notification.micropost, style:"font-weight: bold;" %>.
+    <% when "comment" then %>
+      <% @comment=Comment.find_by(id: notification.comment_id)&.content %>
+      <%= link_to notification.visiter.username, notification.visiter, style:"font-weight: bold;" %> comments <%= link_to 'your post', notification.micropost, style:"font-weight: bold;" %>.
+  <% end %>
+  <span class="moderate-font"><%= " (#{time_ago_in_words(notification.created_at)} "+" ago)" %></span>
+  <br>
+  <% if !@comment.nil? %>
+    <p class="moderate-font"><%= @comment %></p>
+  <% end %>
+</div>
