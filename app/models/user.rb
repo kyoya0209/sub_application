@@ -44,19 +44,6 @@ class User < ApplicationRecord
     BCrypt::Password.create(string, cost: cost)
   end
          
-  def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.provider = auth.provider
-      user.uid = auth.uid
-      user.name = auth.info.name
-      user.email = User.dummy_email(auth)
-      user.password = Devise.friendly_token[0, 20]
-      user.image = auth.info.image.gsub("_normal","") if user.provider == "twitter"
-      user.image = auth.info.image.gsub("picture","picture?type=large") if user.provider == "facebook"
-      user.image = auth.info.image if user.provider == "google_oauth2"
-    end 
-  end
-  
   def feed
     following_ids = "SELECT followed_id FROM relationships
                      WHERE follower_id = :user_id"
@@ -107,11 +94,25 @@ class User < ApplicationRecord
     end
   end
   
-  private
-
-    def self.dummy_email(auth)
-      "#{auth.uid}-#{auth.provider}@example.com"
+  class << self
+    def find_or_create_for_oauth(auth)
+      find_or_create_by!(email: auth.info.email) do |user|
+        user.provider = auth.provider
+        user.uid = auth.uid
+        user.name = auth.info.name
+        user.email = auth.info.email
+        password = Devise.friendly_token[0,20]
+        logger.debug password
+        user.password = password
+      end
     end
-    
-    
+
+    def new_with_session(params, session)
+      if user_attributes = session['devise.user_attributes']
+        new(user_attributes) { |user| user.attributes = params }
+      else
+        super
+      end
+    end
+  end
 end
