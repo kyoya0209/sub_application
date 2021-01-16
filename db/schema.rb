@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_11_065146) do
+ActiveRecord::Schema.define(version: 2021_01_16_020921) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -87,6 +87,15 @@ ActiveRecord::Schema.define(version: 2021_01_11_065146) do
     t.index ["follower_id"], name: "index_relationships_on_follower_id"
   end
 
+  create_table "sns_credentials", force: :cascade do |t|
+    t.string "provider"
+    t.string "uid"
+    t.integer "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_sns_credentials_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.string "username", default: "", null: false
@@ -99,8 +108,6 @@ ActiveRecord::Schema.define(version: 2021_01_11_065146) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
-    t.string "provider"
-    t.string "uid"
     t.string "image"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -118,4 +125,5 @@ ActiveRecord::Schema.define(version: 2021_01_11_065146) do
   add_foreign_key "comments", "microposts"
   add_foreign_key "comments", "users"
   add_foreign_key "microposts", "users"
+  add_foreign_key "sns_credentials", "users"
 end

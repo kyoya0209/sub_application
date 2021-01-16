@@ -37,6 +37,8 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.7'
 
+gem 'dotenv-rails'
+
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-facebook'
@@ -66,7 +68,6 @@ group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
-  gem 'dotenv-rails'
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
 end
