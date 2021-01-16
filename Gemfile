@@ -41,6 +41,7 @@ gem 'dotenv-rails'
 
 gem 'devise'
 gem 'omniauth'
+gem 'omniauth-rails_csrf_protection', '~> 0.1'
 gem 'omniauth-facebook'
 
 gem 'devise-i18n'
